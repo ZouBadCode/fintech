@@ -33,6 +33,9 @@ class MovingAverage:
         """
         ema_column_name = f'EMA_{span}'
         self.data[ema_column_name] = self.data['value'].ewm(span=span, adjust=False).mean()
+        
+        # 替換前 span-1 天的值為 NaN
+        self.data.iloc[:span-1, self.data.columns.get_loc(ema_column_name)] = np.nan
         return self.data[[ema_column_name]]
 
     def calculate_wma(self, average_days):
