@@ -5,7 +5,7 @@ import yfinance as yf
 def get_user_inputs():
     inputs = []
     while True:
-        indicator_type = input("輸入指標類型 (SMA, EMA, WMA) 或 'DONE' 完成輸入: ").upper()
+        indicator_type = input("輸入指標類型 (SMA, EMA, WMA, DEMA, TEMA) 或 'DONE' 完成輸入: ").upper()
         if indicator_type == 'DONE':
             break
         average_days = int(input(f"輸入 {indicator_type} 的天數: "))
@@ -19,6 +19,7 @@ def main():
     stock_data = stock_data[['Close']].reset_index()
     stock_data.rename(columns={'Date': 'date', 'Close': 'value'}, inplace=True)
     # 初始化MovingAverage類
+    print(stock_data)
     ma = MovingAverage(stock_data)
 
     # 獲取用戶輸入的指標類型和天數
@@ -35,6 +36,10 @@ def main():
             result = ma.calculate_ema(average_days)
         elif indicator_type == 'WMA':
             result = ma.calculate_wma(average_days)
+        elif indicator_type == 'DEMA':
+            result = ma.calculate_dema(average_days)
+        elif indicator_type == 'TEMA':
+            result = ma.calculate_tema(average_days)
         else:
             print(f"未知的指標類型: {indicator_type}")
             continue
