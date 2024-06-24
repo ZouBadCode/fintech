@@ -2,15 +2,19 @@
 import pandas as pd
 from moving_average import MovingAverage
 import yfinance as yf
+
+
 def get_user_inputs():
     inputs = []
     while True:
-        indicator_type = input("輸入指標類型 (SMA, EMA, WMA, DEMA, TEMA) 或 'DONE' 完成輸入: ").upper()
+        indicator_type = input(
+            "輸入指標類型 (SMA, EMA, WMA, DEMA, TEMA) 或 'DONE' 完成輸入: ").upper()
         if indicator_type == 'DONE':
             break
         average_days = int(input(f"輸入 {indicator_type} 的天數: "))
         inputs.append((indicator_type, average_days))
     return inputs
+
 
 def main():
     # 讀取數據
@@ -30,19 +34,21 @@ def main():
 
     # 根據用戶輸入計算不同的移動平均值
     for indicator_type, average_days in user_inputs:
-        if indicator_type == 'SMA':
-            result = ma.calculate_sma(average_days)
-        elif indicator_type == 'EMA':
-            result = ma.calculate_ema(average_days)
-        elif indicator_type == 'WMA':
-            result = ma.calculate_wma(average_days)
-        elif indicator_type == 'DEMA':
-            result = ma.calculate_dema(average_days)
-        elif indicator_type == 'TEMA':
-            result = ma.calculate_tema(average_days)
-        else:
-            print(f"未知的指標類型: {indicator_type}")
-            continue
+        match indicator_type:
+            case 'SMA':
+                result = ma.calculate_sma(average_days)
+            case 'EMA':
+                result = ma.calculate_ema(average_days)
+            case 'WMA':
+                result = ma.calculate_wma(average_days)
+            case 'DEMA':
+                result = ma.calculate_dema(average_days)
+            case 'TEMA':
+                result = ma.calculate_tema(average_days)
+            case _:
+                print(f"未知的指標類型: {indicator_type}")
+                continue
+
         results = pd.concat([results, result], axis=1)
 
     # 輸出結果
@@ -50,6 +56,7 @@ def main():
 
     # 將結果保存到CSV文件
     results.to_csv('result.csv')
-    
+
+
 if __name__ == "__main__":
     main()
